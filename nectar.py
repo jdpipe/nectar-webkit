@@ -86,13 +86,9 @@ class GuacApp:
 
         atexit.register(self.restore_gnome_keys)
 
-        if self.auth_mode == "app":
-            print(f"[webkit] App-mode login: {GUAC_LOGIN_URL}")
-            self.webview.load_uri(GUAC_LOGIN_URL)
-        else:
-            self.start_redirect_server()
-            print(f"[browser] Opening browser to {GUAC_LOGIN_URL}")
-            webbrowser.open(GUAC_LOGIN_URL)
+        # app-only mode: always load Guacamole in embedded WebView
+        print(f"[webkit] App-mode login: {GUAC_LOGIN_URL}")
+        self.webview.load_uri(GUAC_LOGIN_URL)
 
     def start_redirect_server(self):
         self.server = http.server.HTTPServer(('localhost', REDIRECT_PORT), RedirectHandler)
@@ -197,8 +193,8 @@ class GuacApp:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Guacamole Desktop Launcher")
-    parser.add_argument("--auth", choices=["browser", "app"], default="browser",
-                        help="Choose auth mode: 'browser' (default) or 'app'")
+    parser.add_argument("--auth", choices=["app"], default="app",
+                        help="Authentication mode (only 'app' is supported)")
     args = parser.parse_args()
     GuacApp(auth_mode=args.auth)
     Gtk.main()
