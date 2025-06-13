@@ -78,6 +78,10 @@ class GuacApp:
         self.window.connect("key-press-event", self.on_key_press)
 
         self.webview = WebKit2.WebView.new_with_context(self.context)
+
+        settings = self.webview.get_settings()
+        settings.set_property("enable-developer-extras", True)
+
         self.webview.connect("create", self.handle_create)
         self.webview.connect("decide-policy", self.on_decide_policy)
         self.webview.connect("load-changed", self.on_load_changed)
@@ -199,3 +203,4 @@ if __name__ == "__main__":
     GuacApp(auth_mode=args.auth)
     Gtk.main()
 
+# vim:syntax=python:ts=4:sw=4:et
