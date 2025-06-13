@@ -11,6 +11,7 @@ import http.server
 import webbrowser
 from urllib.parse import urlparse, parse_qs
 from pathlib import Path
+from dotenv import load_dotenv, set_key
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('WebKit2', '4.0')
@@ -66,6 +67,8 @@ class GuacApp:
             print("[gnome] Previous session ended unexpectedly — restoring keybindings...")
             self.restore_gnome_keys()
 
+        load_dotenv()
+
         data_manager = WebKit2.WebsiteDataManager(
             base_data_directory=CACHE_DIR,
             base_cache_directory=CACHE_DIR,
@@ -102,6 +105,15 @@ class GuacApp:
 
     def load_guacamole_url(self, url):
         GLib.idle_add(self.webview.load_uri, url)
+
+    def get_credentials(self):
+        username = os.getenv('USERNAME')
+        password = os.getenv('PASSWORD')
+        return username, password
+
+    def save_credentials(self, username, password):
+        set_key('.env', 'USERNAME', username)
+        set_key('.env', 'PASSWORD', password)
 
     def get_gsetting(self, schema, key):
         result = subprocess.run(["gsettings", "get", schema, key], capture_output=True, text=True)
