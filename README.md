@@ -4,27 +4,6 @@ This small script implements a way to access Nectar's virtual desktops (Guacamol
 
 * You can get true full screen view by typing ctrl-super-F11; type this again to exist full screen.
 * The script intercepts GNOME alt-tab and related keystrokes and passes them to the Gaucamole client, to improve keyboard usability. When the script exits full screen mode, the keybindings are restored.
-* The script performs authentication via the web browser by default, or it can be done in the WebKit app window if preferred -- use the command-line arguments. Via the app is preferred since you probably have Microsoft authentication cookies etc there and will be able to reconnect to your virtual machine more smoothly using that route.
-
-# Redirectio settings for Firefox:
-
-Match URL:
-```
-https?://desktop-qriscloud\.rc\.nectar\.org\.au/\#/client/(.*)
-```
-
-Redirect to:
-```
-http://localhost:34567/?token=$1
-```
-
-Example:
-```
-https://desktop-qriscloud.rc.nectar.org.au/#/client/MTc0OTgAaaaaaaaa
-```
-redirects to
-```
-http://localhost:34567/?token=MTc0OTgAaaaaaaaa
-```
+* The script performs authentication via the WebKit app window. Efforts to re-use OAuth tokens that exist in the user's browser were unsuccessful, apparently because of limitatins imposed by the Nectar administrators.
 
 
